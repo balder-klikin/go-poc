@@ -1,0 +1,14 @@
+coverage/
+report/
+test/
+.DS_Store/
+.git/
+
+Dockerfile
+.dockerignore
+.editorconfig
+.gitignore
+
+*.log
+*.log.*
+*.sublime-*

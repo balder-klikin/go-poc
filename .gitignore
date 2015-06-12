@@ -1,0 +1,11 @@
+coverage/
+dist/
+report/
+*.log
+*.log.*
+
+# Sublime
+*.sublime-workspace
+
+# MacOS
+.DS_Store/
