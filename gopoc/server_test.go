@@ -1,28 +1,38 @@
-package main
+package gopoc
 
 import (
+	"github.com/gin-gonic/gin"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"testing"
-//	"net/http"
-//	"net/http/httptest"
 
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestIntegerManipulation(t *testing.T) {
+func TestGoPocE2E(t *testing.T) {
 	t.Parallel()
 
-//	var request *http.Request
-//	var recorder *httptest.ResponseRecorder
-//
-//	Convey("GET /ping", t, func() {
-//		recorder = httptest.NewRecorder()
-//
-//		Convey("should get pong", func() {
-//			request, _ = http.NewRequest("GET", "/ping", nil)
-//
-//		})
-//
-//	})
+	var request 	*http.Request
+	var recorder 	*httptest.ResponseRecorder
+	var server 		*gin.Engine
+
+	Convey("GET /ping", t, func() {
+		recorder = httptest.NewRecorder()
+		server = NewServer()
+		request, _ = http.NewRequest("GET", "/ping", nil)
+
+		server.ServeHTTP(recorder, request)
+		var p Ping
+		json.Unmarshal(recorder.Body.Bytes(), &p)
+
+		Convey("should get 200", func() {
+			So(recorder.Code, ShouldEqual, 200)
+		})
+		Convey("should get pong", func() {
+			So(p.Value, ShouldEqual, "pong")
+		})
+	})
 
 	Convey("Given a starting integer value", t, func() {
 		x := 42
