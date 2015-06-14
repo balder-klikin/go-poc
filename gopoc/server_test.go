@@ -1,8 +1,8 @@
 package gopoc
 
 import (
-	"github.com/gin-gonic/gin"
 	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,24 +13,27 @@ import (
 func TestGoPocE2E(t *testing.T) {
 	t.Parallel()
 
-	var request 	*http.Request
-	var recorder 	*httptest.ResponseRecorder
-	var server 		*gin.Engine
+	var req *http.Request               // the req
+	var resp *httptest.ResponseRecorder // resp
+	var mgoSession *MgoSession
+	var server *gin.Engine              // the gin Engine
+
 
 	Convey("GET /ping", t, func() {
-		recorder = httptest.NewRecorder()
-		server = NewServer()
-		request, _ = http.NewRequest("GET", "/ping", nil)
+		resp = httptest.NewRecorder()
+		mgoSession = NewMgoSession("go-poc-e2e")
+		server = NewServer(mgoSession)
+		req, _ = http.NewRequest("GET", "/ping", nil)
 
-		server.ServeHTTP(recorder, request)
-		var p Ping
-		json.Unmarshal(recorder.Body.Bytes(), &p)
+		server.ServeHTTP(resp, req)
+		var ping Ping
+		json.Unmarshal(resp.Body.Bytes(), &ping)
 
 		Convey("should get 200", func() {
-			So(recorder.Code, ShouldEqual, 200)
+			So(resp.Code, ShouldEqual, 200)
 		})
 		Convey("should get pong", func() {
-			So(p.Value, ShouldEqual, "pong")
+			So(ping.Value, ShouldEqual, "PONG!")
 		})
 	})
 

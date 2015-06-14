@@ -1,15 +1,29 @@
 package gopoc
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"labix.org/v2/mgo/bson"
+)
 
-func NewServer() *gin.Engine {
-	router := gin.Default()
+func NewServer(mgoSession *MgoSession) *gin.Engine {
+	api := gin.Default()
+	api.Use(SetDatabase(mgoSession))
 
-	router.GET("/ping", pong)
+	api.GET("/ping", pong)
 
-	return router
+	return api
 }
 
 func pong(c *gin.Context) {
-	c.JSON(200, Ping{"pong"})
+	db := GetDatabase(c)
+
+	pings := db.C("pings")
+	pong := Ping{}
+	err := pings.Find(bson.M{}).One(&pong)
+	if err != nil {
+		c.String(400, "Error!")
+		return
+	}
+
+	c.JSON(200, pong)
 }

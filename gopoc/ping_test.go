@@ -1,8 +1,8 @@
 package gopoc
 
 import (
-	"testing"
 	. "github.com/smartystreets/goconvey/convey"
+	"testing"
 )
 
 func TestPingValidation(t *testing.T) {
