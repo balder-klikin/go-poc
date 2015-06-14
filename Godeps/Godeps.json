@@ -23,6 +23,11 @@
 			"ImportPath": "gopkg.in/bluesuncorp/validator.v5",
 			"Comment": "v5.7.1",
 			"Rev": "df95f9de27b8022e57f8ce09448cee6b1170bb3d"
+		},
+		{
+			"ImportPath": "labix.org/v2/mgo",
+			"Comment": "287",
+			"Rev": "gustavo@niemeyer.net-20140501184651-975yyw9ipld92pji"
 		}
 	]
 }
