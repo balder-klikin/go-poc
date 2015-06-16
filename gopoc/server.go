@@ -2,7 +2,7 @@ package gopoc
 
 import (
 	"github.com/gin-gonic/gin"
-	"labix.org/v2/mgo/bson"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func NewServer(mgoSession *MgoSession) *gin.Engine {

@@ -2,7 +2,7 @@ package gopoc
 
 import (
 	"github.com/gin-gonic/gin"
-	"labix.org/v2/mgo"
+	"gopkg.in/mgo.v2"
 	"log"
 )
 

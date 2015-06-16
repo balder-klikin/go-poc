@@ -25,9 +25,9 @@
 			"Rev": "df95f9de27b8022e57f8ce09448cee6b1170bb3d"
 		},
 		{
-			"ImportPath": "labix.org/v2/mgo",
-			"Comment": "287",
-			"Rev": "gustavo@niemeyer.net-20140501184651-975yyw9ipld92pji"
+			"ImportPath": "gopkg.in/mgo.v2",
+			"Comment": "r2015.06.03-3-g3569c88",
+			"Rev": "3569c88678d88179dcbd68d02ab081cbca3cd4d0"
 		}
 	]
 }
