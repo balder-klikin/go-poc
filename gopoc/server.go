@@ -5,25 +5,34 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func NewServer(mgoSession *MgoSession) *gin.Engine {
-	api := gin.Default()
-	api.Use(SetDatabase(mgoSession))
-
-	api.GET("/ping", pong)
-
-	return api
+type Server struct {
+	*gin.Engine
 }
 
-func pong(c *gin.Context) {
-	db := GetDatabase(c)
+func NewServer(session *DbSession) *Server {
+	api := gin.Default()
+	api.Use(SetDatabase(session))
+
+	api.GET("/check", check)
+	api.GET("/ping", pong)
+
+	return &Server{api}
+}
+
+func check(ctx *gin.Context) {
+	ctx.String(200, "OK")
+}
+
+func pong(ctx *gin.Context) {
+	db := GetDatabase(ctx)
 
 	pings := db.C("pings")
 	pong := Ping{}
 	err := pings.Find(bson.M{}).One(&pong)
 	if err != nil {
-		c.String(400, "Error!")
+		ctx.String(400, "Error!")
 		return
 	}
 
-	c.JSON(200, pong)
+	ctx.JSON(200, pong)
 }

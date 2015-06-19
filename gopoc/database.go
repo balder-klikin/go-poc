@@ -3,24 +3,21 @@ package gopoc
 import (
 	"github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2"
-	"log"
 )
 
-
-type MgoSession struct {
+type DbSession struct {
 	*mgo.Session
 	db string
 }
 
-
-func NewMgoSession(name string) *MgoSession {
+func NewDbSession(name string) *DbSession {
 	session, err := mgo.Dial("mongodb://localhost")
 	if err != nil {
 		panic(err)
 	}
 
 	createIndexes(session.DB(name))
-	return &MgoSession{session, name}
+	return &DbSession{session, name}
 }
 
 func createIndexes(db *mgo.Database) {
@@ -35,26 +32,19 @@ func createIndexes(db *mgo.Database) {
 	}
 }
 
-func SetDatabase(mgoSession *MgoSession) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		s := mgoSession.Copy()
-		c.Set("db", s.DB(mgoSession.db))
+func SetDatabase(DbSession *DbSession) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		s := DbSession.Copy()
+		ctx.Set("db", s.DB(DbSession.db))
 		defer s.Close()
 
-		c.Next()
+		ctx.Next()
 	}
 }
 
-func GetDatabase(c *gin.Context) *mgo.Database {
-	_db, exists := c.Get("db")
-	if !exists {
-		log.Fatal("Database !exists")
-	}
-
-	db, ok := _db.(*mgo.Database)
-	if !ok {
-		log.Fatal("Database !ok")
-	}
+func GetDatabase(ctx *gin.Context) *mgo.Database {
+	rawDb, _ := ctx.Get("db")
+	db, _ := rawDb.(*mgo.Database)
 
 	return db
 }

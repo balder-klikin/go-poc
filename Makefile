@@ -8,7 +8,8 @@ DOCKER_VERSION ?= latest
 DOCKER_IMAGE    = klikindockerhub/go-poc:$(DOCKER_VERSION)
 
 
-default: test
+default:
+	go build
 
 install:
 	go install
@@ -24,28 +25,13 @@ dev-test:
 	goconvey --port 9090
 
 test: pretest
-	go test -v
+	go test ./...
 
 test-docs: pretest
 	rm -f $(REPORT_DOCS)
 	mkdir -p docs
 
-test-unit: pretest
-
-test-e2e: pretest
-
-test-ci: pretest prereport precoverage
-
-coverage: pretest precoverage
-
 pretest:
-
-prereport:
-	rm -Rf report
-	mkdir -p report
-
-precoverage:
-	rm -Rf coverage
 
 docker-build: test
 	docker build --tag $(DOCKER_IMAGE) .
