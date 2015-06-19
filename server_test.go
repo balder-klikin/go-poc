@@ -1,4 +1,4 @@
-package gopoc
+package main
 
 import (
 	"encoding/json"

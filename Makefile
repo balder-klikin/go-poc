@@ -19,7 +19,8 @@ build:
 	mkdir -p dist
 	go build -o dist/go-poc
 
-dev-run:
+dev-run: build
+	dist/go-poc
 
 dev-test:
 	goconvey --port 9090

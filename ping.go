@@ -1,4 +1,4 @@
-package gopoc
+package main
 
 type Ping struct {
 	Value string `json:"value"`
