@@ -1,4 +1,4 @@
-package main
+package app
 
 type Photo struct {
 	Name        string `json:"name"`
