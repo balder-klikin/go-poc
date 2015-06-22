@@ -8,12 +8,28 @@
 			"Rev": "4998bc2b2e36cb2c498d75b1213dc92790fec98a"
 		},
 		{
+			"ImportPath": "github.com/goamz/goamz/aws",
+			"Rev": "50f393d45473b635cab34f2b3e0bbcd103df29dc"
+		},
+		{
+			"ImportPath": "github.com/goamz/goamz/s3",
+			"Rev": "50f393d45473b635cab34f2b3e0bbcd103df29dc"
+		},
+		{
 			"ImportPath": "github.com/manucorporat/sse",
 			"Rev": "c142f0f1baea5cef7f98a8a6c222f6134368c1f5"
 		},
 		{
 			"ImportPath": "github.com/mattn/go-colorable",
 			"Rev": "d67e0b7d1797975196499f79bcc322c08b9f218b"
+		},
+		{
+			"ImportPath": "github.com/nfnt/resize",
+			"Rev": "dc93e1b98c579d90ee2fa15c1fd6dac34f6e7899"
+		},
+		{
+			"ImportPath": "github.com/vaughan0/go-ini",
+			"Rev": "a98ad7ee00ec53921f08832bc06ecf7fd600e6a1"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
