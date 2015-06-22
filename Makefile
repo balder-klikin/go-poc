@@ -11,6 +11,9 @@ DOCKER_IMAGE    = klikindockerhub/go-poc:$(DOCKER_VERSION)
 default:
 	go build
 
+get:
+	godep get
+
 install:
 	go install
 
