@@ -1,31 +1,32 @@
-package app
+package app_test
 
 import (
-	"testing"
+	. "github.com/balder-klikin/go-poc/app"
 
-	. "github.com/smartystreets/goconvey/convey"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-func TestPingValidation(t *testing.T) {
-	t.Parallel()
+var _ = Describe("Given a Ping", func() {
+	var ping Ping
 
-	Convey("Given a Ping", t, func() {
-		var ping Ping
-
-		Convey("When all fields are OK", func() {
+	Context("When all fields are OK", func() {
+		BeforeEach(func() {
 			ping = Ping{"pong"}
-
-			Convey("Then it should be valid", func() {
-				So(ping.valid(), ShouldBeTrue)
-			})
 		})
 
-		Convey("When the value is blank", func() {
-			ping = Ping{""}
-
-			Convey("Then it should not be valid", func() {
-				So(ping.valid(), ShouldBeFalse)
-			})
+		It("Then it should be valid", func() {
+			Expect(ping.Valid()).To(BeTrue())
 		})
 	})
-}
+
+	Context("When the value is blank", func() {
+		BeforeEach(func() {
+			ping = Ping{""}
+		})
+
+		It("Then it should not be valid", func() {
+			Expect(ping.Valid()).To(BeFalse())
+		})
+	})
+})

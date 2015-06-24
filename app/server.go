@@ -10,7 +10,8 @@ type Server struct {
 }
 
 func NewServer(session *DbSession) *Server {
-	api := gin.Default()
+	api := gin.New()
+	api.Use(gin.Recovery())
 	api.Use(SetDatabase(session))
 
 	api.GET("/check", check)

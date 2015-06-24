@@ -1,78 +1,54 @@
-package app
+package app_test
 
 import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"testing"
 
-	. "github.com/smartystreets/goconvey/convey"
+	"github.com/balder-klikin/go-poc/app"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-func TestGoPocE2E(t *testing.T) {
-	t.Parallel()
-
-	var req *http.Request
-	var resp *httptest.ResponseRecorder
-	var DbSession *DbSession
-	var server *Server
-
-	Convey("GET /ping", t, func() {
+var _ = Describe("Server E2E", func() {
+	var (
+		req  *http.Request
+		resp *httptest.ResponseRecorder
+	)
+	BeforeEach(func() {
 		resp = httptest.NewRecorder()
-		DbSession = NewDbSession("go-poc-e2e")
-		server = NewServer(DbSession)
-		req, _ = http.NewRequest("GET", "/ping", nil)
+	})
 
-		server.ServeHTTP(resp, req)
-		var ping Ping
-		json.Unmarshal(resp.Body.Bytes(), &ping)
+	Context("GET /ping", func() {
+		var ping app.Ping
 
-		Convey("should get 200", func() {
-			So(resp.Code, ShouldEqual, 200)
+		BeforeEach(func() {
+			req, _ = http.NewRequest("GET", "/ping", nil)
+
+			App.ServeHTTP(resp, req)
+			json.Unmarshal(resp.Body.Bytes(), &ping)
 		})
-		Convey("should get pong", func() {
-			So(ping.Value, ShouldEqual, "PONG!")
+
+		It("should get 200", func() {
+			Expect(resp.Code).To(Equal(200))
+		})
+		It("should get pong", func() {
+			Expect(ping.Value).To(Equal("PONG!"))
 		})
 	})
 
-	Convey("GET /check", t, func() {
-		resp = httptest.NewRecorder()
-		DbSession = NewDbSession("go-poc-e2e")
-		server = NewServer(DbSession)
-		req, _ = http.NewRequest("GET", "/check", nil)
+	Context("GET /check", func() {
+		BeforeEach(func() {
+			req, _ = http.NewRequest("GET", "/check", nil)
 
-		server.ServeHTTP(resp, req)
-
-		Convey("should get 200", func() {
-			So(resp.Code, ShouldEqual, 200)
+			App.ServeHTTP(resp, req)
 		})
-		Convey("should get pong", func() {
-			So(resp.Body.String(), ShouldEqual, "OK")
+
+		It("should get 200", func() {
+			Expect(resp.Code).To(Equal(200))
 		})
-	})
-
-	Convey("Given a starting integer value", t, func() {
-		x := 42
-
-		Convey("When incremented", func() {
-			x++
-
-			Convey("The value should be greater by one", func() {
-				So(x, ShouldEqual, 43)
-			})
-			Convey("The value should NOT be what it used to be", func() {
-				So(x, ShouldNotEqual, 42)
-			})
-		})
-		Convey("When decremented", func() {
-			x--
-
-			Convey("The value should be lesser by one", func() {
-				So(x, ShouldEqual, 41)
-			})
-			Convey("The value should NOT be what it used to be", func() {
-				So(x, ShouldNotEqual, 42)
-			})
+		It("should get pong", func() {
+			Expect(resp.Body.String()).To(Equal("OK"))
 		})
 	})
-}
+})

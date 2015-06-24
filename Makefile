@@ -26,14 +26,17 @@ dev-run: build
 	dist/go-poc
 
 dev-test:
-	goconvey --port 9090
+	ginkgo watch -notify -r
 
 test: pretest
-	go test ./...
+	ginkgo -r
 
 test-docs: pretest
 	rm -f $(REPORT_DOCS)
 	mkdir -p docs
+
+ci-test: pretest
+	ginkgo -r --noColor
 
 pretest:
 
