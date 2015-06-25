@@ -12,7 +12,7 @@ type Server struct {
 func NewServer(session *DbSession) *Server {
 	api := gin.New()
 	api.Use(gin.Recovery())
-	api.Use(SetDatabase(session))
+	api.Use(session.Database())
 
 	api.GET("/check", check)
 	api.GET("/ping", pong)
@@ -33,6 +33,7 @@ func pong(ctx *gin.Context) {
 	err := pings.Find(bson.M{}).One(&pong)
 	if err != nil {
 		ctx.String(400, "Error!")
+		ctx.Abort()
 		return
 	}
 

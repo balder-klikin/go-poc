@@ -32,7 +32,7 @@ func createIndexes(db *mgo.Database) {
 	}
 }
 
-func SetDatabase(DbSession *DbSession) gin.HandlerFunc {
+func (DbSession *DbSession) Database() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		s := DbSession.Copy()
 		ctx.Set("db", s.DB(DbSession.db))
@@ -43,8 +43,5 @@ func SetDatabase(DbSession *DbSession) gin.HandlerFunc {
 }
 
 func GetDatabase(ctx *gin.Context) *mgo.Database {
-	rawDb, _ := ctx.Get("db")
-	db, _ := rawDb.(*mgo.Database)
-
-	return db
+	return ctx.MustGet("db").(*mgo.Database)
 }
