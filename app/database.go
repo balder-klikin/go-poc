@@ -41,7 +41,3 @@ func (DbSession *DbSession) Database() gin.HandlerFunc {
 		ctx.Next()
 	}
 }
-
-func GetDatabase(ctx *gin.Context) *mgo.Database {
-	return ctx.MustGet("db").(*mgo.Database)
-}

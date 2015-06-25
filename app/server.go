@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -10,15 +11,17 @@ type Server struct {
 }
 
 func NewServer(session *DbSession) *Server {
-	api := gin.New()
+	router := gin.New()
+	api := router.Group("/")
 	api.Use(gin.Recovery())
 	api.Use(session.Database())
+	{
+		api.GET("/check", check)
+		api.GET("/ping", pong)
+		api.POST("/upload", uploadImageS3)
+	}
 
-	api.GET("/check", check)
-	api.GET("/ping", pong)
-	api.POST("/upload", uploadImageS3)
-
-	return &Server{api}
+	return &Server{router}
 }
 
 func check(ctx *gin.Context) {
@@ -26,7 +29,7 @@ func check(ctx *gin.Context) {
 }
 
 func pong(ctx *gin.Context) {
-	db := GetDatabase(ctx)
+	db := getDatabase(ctx)
 
 	pings := db.C("pings")
 	pong := Ping{}
@@ -45,4 +48,8 @@ func uploadImageS3(ctx *gin.Context) {
 	ctx.BindJSON(&photo)
 
 	photo.uploadImageS3()
+}
+
+func getDatabase(ctx *gin.Context) *mgo.Database {
+	return ctx.MustGet("db").(*mgo.Database)
 }
