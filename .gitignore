@@ -5,6 +5,7 @@ dist/
 report/
 *.log
 *.log.*
+*.coverprofile
 
 # Sublime
 *.sublime-workspace

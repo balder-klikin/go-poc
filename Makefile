@@ -1,26 +1,26 @@
 # go-poc Makefile
 
-REPORT_XUNIT = report/go-poc-xunit.xml
-REPORT_DOCS  = docs/README.md
+REPORT_DOCS  		= docs/README.txt
+REPORT_COVER  		= app/app.coverprofile
+REPORT_COVER_HTML 	= report/app-coverage.html
 
 
 DOCKER_VERSION ?= latest
-DOCKER_IMAGE    = klikindockerhub/go-poc:$(DOCKER_VERSION)
+DOCKER_IMAGE    = klikindockerhub/gopoc:$(DOCKER_VERSION)
 
 
-default:
-	go build
+default: build
 
-get:
-	godep get
+dep-save:
+	godep save ./...
 
-install:
-	go install
-
-build:
+build: test
 	rm -Rf dist
 	mkdir -p dist
-	go build -o dist/go-poc
+	godep go build -o dist/go-poc
+
+install:
+	godep go install
 
 dev-run: build
 	dist/go-poc
@@ -28,17 +28,25 @@ dev-run: build
 dev-test:
 	ginkgo watch -notify -r
 
-test: pretest
+dev-coverage: prereport
+	ginkgo -r --cover
+	godep go tool cover -html=$(REPORT_COVER)
+
+test:
 	ginkgo -r
 
-test-docs: pretest
+test-docs: prereport
 	rm -f $(REPORT_DOCS)
 	mkdir -p docs
+	ginkgo -r --noColor >> $(REPORT_DOCS)
 
-ci-test: pretest
-	ginkgo -r --noColor
+ci-test: prereport
+	ginkgo -r --randomizeAllSpecs --randomizeSuites --failOnPending --cover --trace --race --progress --noColor
+	go tool cover -html=$(REPORT_COVER) -o $(REPORT_COVER_HTML)
 
-pretest:
+prereport:
+	rm -Rf report
+	mkdir -p report
 
 docker-build: test
 	docker build --tag $(DOCKER_IMAGE) .
