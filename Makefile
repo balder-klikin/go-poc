@@ -11,9 +11,6 @@ DOCKER_IMAGE    = klikindockerhub/gopoc:$(DOCKER_VERSION)
 
 default: build
 
-dep-get:
-	go get -v -t ./...
-
 dep-save:
 	godep save ./...
 
@@ -24,6 +21,9 @@ build: test
 
 install:
 	godep go install
+
+dev-deps:
+	go get -v -t ./...
 
 dev-run: build
 	dist/go-poc
